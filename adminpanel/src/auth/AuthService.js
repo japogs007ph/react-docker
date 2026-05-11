@@ -1,4 +1,6 @@
-const BASE_URL = "http://10.2.2.100/DEV/Portfolio/Devs/mark.rabit/ReactAppApi/api/Users";
+import axios from "axios";
+
+const BASE_URL = "http://10.2.2.100/DEV/Portfolio/Devs/mark.rabit/ReactAppApi/api/Users"; 
 
 let refreshPromise = null;
 
@@ -7,25 +9,22 @@ let refreshPromise = null;
 =========================== */
 
 export async function login(username, password) {
-  const res = await fetch(`${BASE_URL}/Login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ username, password })
-  });
+  try {
+    const res = await axios.post(`${BASE_URL}/login`, {
+      userName: username,
+      Password: password,
+    });
 
-  if (!res.ok) {
+    const data = res.data;
+
+    localStorage.setItem("accessToken", data.accessToken);
+    localStorage.setItem("refreshToken", data.refreshToken);
+
+    return data;
+  } catch (err) {
+    console.error("Login error:", err);
     throw new Error("Invalid credentials");
   }
-
-  const data = await res.json();
-
-  // store both tokens
-  localStorage.setItem("accessToken", data.accessToken);
-  localStorage.setItem("refreshToken", data.refreshToken);
-
-  return data;
 }
 
 /* ===========================
@@ -48,32 +47,22 @@ export async function refreshAccessToken() {
   if (refreshPromise) return refreshPromise;
 
   const refreshToken = getRefreshToken();
-  console.log("Attempting to refresh token with refresh token:", refreshToken);
 
-  if (!refreshToken) {
-    console.log("No refresh token available. Cannot refresh access token.");
-    return null;
-  }
+  if (!refreshToken) return null;
 
-  refreshPromise = fetch(`${BASE_URL}/Refresh`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ refreshToken })
-  })
-    .then(async (res) => {
-      if (!res.ok) {
-        console.log("Token refresh failed:", res.status, res.statusText);
-        throw new Error("Refresh failed");
-      }
-
-      const data = await res.json();
-      console.log("Token successfully refreshed at:", new Date().toLocaleTimeString());
+  refreshPromise = axios
+    .post(`${BASE_URL}/refresh`, {
+      refreshToken,
+    })
+    .then((res) => {
+      const data = res.data;
 
       localStorage.setItem("accessToken", data.accessToken);
+      localStorage.setItem("refreshToken", data.refreshToken);
+
       return data.accessToken;
     })
-    .catch((err) => {
-      console.log("Token refresh error:", err.message);
+    .catch(() => {
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
       return null;
@@ -84,5 +73,3 @@ export async function refreshAccessToken() {
 
   return refreshPromise;
 }
-
-

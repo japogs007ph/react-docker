@@ -1,23 +1,16 @@
-import axios from "axios";
+import api from "../api";
 
-const API = "http://10.2.2.100/DEV/Portfolio/Devs/mark.rabit/ReactAppApi/api/Users";
+export const getUsers = () =>
+  api.get("/users").then((res) => res.data);
 
-export async function getUsers() {
-  const res = await axios.get(API);
-  return res.data;
-}
+export const createUser = (data) =>
+  api.post("/users", data);
 
-export async function createUser(data) {
-  return axios.post(API, data);
-}
+export const updateUser = (id, data) =>
+  api.put(`/users/${id}`, data);
 
-export async function updateUser(id, data) {
-  return axios.put(`${API}/${id}`, data);
-}
-
-export async function deleteUser(id) {
-  return axios.delete(`${API}/${id}`);
-}
+export const deleteUser = (id) =>
+  api.delete(`/users/${id}`);
 
 export const activateUser = (id) =>
-  axios.post(`${API}/activate/${id}`);
+  api.post(`/users/activate/${id}`);
