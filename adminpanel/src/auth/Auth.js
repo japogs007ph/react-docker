@@ -39,17 +39,6 @@ export function logout() {
   window.location.href = "/login";
 }
 
-export function getUser() {
-  const token = localStorage.getItem("accessToken");
-  if (!token) return null;
-
-  try {
-    return jwtDecode(token);
-  } catch {
-    return null;
-  }
-}
-
 export function hasRole(role) {
   const user = getUser();
   if (!user) return false;

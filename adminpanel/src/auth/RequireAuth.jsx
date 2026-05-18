@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import { isAuthenticated, hasAnyRole, getUser } from "./Auth";
+import { isAuthenticated, hasAnyRole } from "./Auth";
 import { refreshAccessToken } from "./AuthService";
 
 export default function RequireAuth({ children, allowedRoles }) {
