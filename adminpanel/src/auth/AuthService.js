@@ -1,4 +1,5 @@
 import axios from "axios";
+import { logout } from "./Auth";
 
 const BASE_URL = "http://10.2.2.100/DEV/Portfolio/Devs/mark.rabit/ReactAppApi/api/Users"; 
 
@@ -48,7 +49,10 @@ export async function refreshAccessToken() {
 
   const refreshToken = getRefreshToken();
 
-  if (!refreshToken) return null;
+  if (!refreshToken) {
+    logout();
+    return null;
+  }
 
   refreshPromise = axios
     .post(`${BASE_URL}/refresh`, {
@@ -63,8 +67,7 @@ export async function refreshAccessToken() {
       return data.accessToken;
     })
     .catch(() => {
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
+      logout();
       return null;
     })
     .finally(() => {

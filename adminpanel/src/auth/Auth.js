@@ -26,6 +26,17 @@ export function isAuthenticated() {
   }
 }
 
+export function getUser() {
+  const token = localStorage.getItem("accessToken");
+  if (!token) return null;
+
+  try {
+    return jwtDecode(token);
+  } catch {
+    return null;
+  }
+}
+
 export function getTokenExpiry() {
   const user = getUser();
   if (!user?.exp) return null;
