@@ -11,6 +11,11 @@ export default function RequireAuth({ children, allowedRoles }) {
     async function checkAuth() {
       // Always read the latest token from localStorage
       if (!isAuthenticated()) {
+
+        //Note: If the user is not authenticated, we attempt to refresh the access token. 
+        // But we can also implement auto logoout if isAuthenticated() returns false. 
+        // This is a design choice based on your application's requirements.
+        
         const newToken = await refreshAccessToken();
         if (!newToken) {
           setRedirectTo("/login");

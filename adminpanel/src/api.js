@@ -3,7 +3,7 @@ import { getAccessToken, refreshAccessToken } from "./auth/AuthService";
 import { logout } from "./auth/Auth";
 
 const api = axios.create({
-  baseURL: "http://10.2.2.100/DEV/Portfolio/Devs/mark.rabit/ReactAppApi/api", // better if same origin --- IGNORE ---
+  baseURL: "http://194.15.36.109/api", // better if same origin --- IGNORE ---
 });
 
 

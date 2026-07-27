@@ -1,7 +1,7 @@
 import axios from "axios";
 import { logout } from "./Auth";
 
-const BASE_URL = "http://10.2.2.100/DEV/Portfolio/Devs/mark.rabit/ReactAppApi/api/Users"; 
+const BASE_URL = "http://194.15.36.109/api/Users"; 
 
 let refreshPromise = null;
 
