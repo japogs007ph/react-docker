@@ -3,7 +3,7 @@ import { getAccessToken, refreshAccessToken } from "./auth/AuthService";
 import { logout } from "./auth/Auth";
 
 const api = axios.create({
-  baseURL: "http://194.15.36.109/api", // better if same origin --- IGNORE ---
+  baseURL: `${import.meta.env.VITE_API_URL}/api`, // better if same origin --- IGNORE ---
 });
 
 

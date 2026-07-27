@@ -1,7 +1,7 @@
 import axios from "axios";
 import { logout } from "./Auth";
 
-const BASE_URL = "http://194.15.36.109/api/Users"; 
+const BASE_URL = `${import.meta.env.VITE_API_URL}/Users`; 
 
 let refreshPromise = null;
 
