@@ -1,13 +1,14 @@
 import axios from "axios";
-import { getAccessToken, refreshAccessToken } from "./auth/AuthService";
-import { logout } from "./auth/Auth";
+import { getAccessToken, refreshAccessToken, logout } from "./auth/AuthService";
 
 const api = axios.create({
-  baseURL: `${import.meta.env.VITE_API_URL}`, // better if same origin --- IGNORE ---
+  baseURL: `${import.meta.env.VITE_API_URL}`, withCredentials: true, // better if same origin --- IGNORE ---
 });
 
+/* ===========================
+   REQUEST INTERCEPTOR
+=========================== */
 
-// ✅ REQUEST INTERCEPTOR (attach token)
 api.interceptors.request.use((config) => {
   const token = getAccessToken();
 
@@ -19,7 +20,10 @@ api.interceptors.request.use((config) => {
 });
 
 
-// ✅ RESPONSE INTERCEPTOR (handle 401)
+/* ===========================
+   RESPONSE INTERCEPTOR
+=========================== */
+
 api.interceptors.response.use(
   (response) => response,
   async (error) => {

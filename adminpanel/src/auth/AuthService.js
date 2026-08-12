@@ -1,8 +1,8 @@
 import axios from "axios";
-import { logout } from "./Auth";
 
 const BASE_URL = `${import.meta.env.VITE_API_URL}/Users`; 
 
+let accessToken = null;
 let refreshPromise = null;
 
 /* ===========================
@@ -18,8 +18,8 @@ export async function login(username, password) {
 
     const data = res.data;
 
-    localStorage.setItem("accessToken", data.accessToken);
-    localStorage.setItem("refreshToken", data.refreshToken);
+    // Access token exists only in memory.
+    accessToken = data.accessToken;
 
     return data;
   } catch (err) {
@@ -33,11 +33,7 @@ export async function login(username, password) {
 =========================== */
 
 export function getAccessToken() {
-  return localStorage.getItem("accessToken");
-}
-
-export function getRefreshToken() {
-  return localStorage.getItem("refreshToken");
+  return accessToken;
 }
 
 /* ===========================
@@ -45,29 +41,28 @@ export function getRefreshToken() {
 =========================== */
 
 export async function refreshAccessToken() {
-  if (refreshPromise) return refreshPromise;
-
-  const refreshToken = getRefreshToken();
-
-  if (!refreshToken) {
-    logout();
-    return null;
+  if (refreshPromise) {
+    return refreshPromise;
   }
 
   refreshPromise = axios
-    .post(`${BASE_URL}/refresh`, {
-      refreshToken,
-    })
+    .post(
+      `${BASE_URL}/refresh`,
+      {},
+      {
+        withCredentials: true,
+      }
+    )
     .then((res) => {
       const data = res.data;
 
-      localStorage.setItem("accessToken", data.accessToken);
-      localStorage.setItem("refreshToken", data.refreshToken);
+      accessToken = data.accessToken;
 
-      return data.accessToken;
+      return accessToken;
     })
-    .catch(() => {
-      logout();
+    .catch((err) => {
+      accessToken = null;
+
       return null;
     })
     .finally(() => {
@@ -75,4 +70,34 @@ export async function refreshAccessToken() {
     });
 
   return refreshPromise;
+}
+
+/* ===========================
+   CLEAR AUTH
+=========================== */
+
+export function clearAccessToken() {
+  accessToken = null;
+}
+
+/* ===========================
+   LOGOUT
+=========================== */
+
+export async function logout() {
+  try {
+    await axios.post(
+      `${BASE_URL}/logout`,
+      {},
+      {
+        withCredentials: true,
+      }
+    );
+  } catch (error) {
+    console.error("Logout error:", error);
+  } finally {
+    accessToken = null;
+
+    window.location.href = "/login";
+  }
 }

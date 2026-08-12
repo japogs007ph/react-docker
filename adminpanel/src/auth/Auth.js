@@ -1,4 +1,6 @@
 import { jwtDecode } from "jwt-decode";
+import { getAccessToken } from "./AuthService";
+import axios from "axios";
 
 function getRolesFromToken(decoded) {
   const role =
@@ -9,8 +11,12 @@ function getRolesFromToken(decoded) {
   return Array.isArray(role) ? role : [role];
 }
 
+/* ===========================
+   AUTHENTICATION
+=========================== */
+
 export function isAuthenticated() {
-  const token = localStorage.getItem("accessToken");
+  const token = getAccessToken();
 
   if (!token) return false;
 
@@ -26,8 +32,13 @@ export function isAuthenticated() {
   }
 }
 
+/* ===========================
+   USER
+=========================== */
+
 export function getUser() {
-  const token = localStorage.getItem("accessToken");
+  const token = getAccessToken();
+
   if (!token) return null;
 
   try {
@@ -37,18 +48,21 @@ export function getUser() {
   }
 }
 
+/* ===========================
+   TOKEN EXPIRY
+=========================== */
+
 export function getTokenExpiry() {
   const user = getUser();
+
   if (!user?.exp) return null;
 
   return user.exp * 1000; //milliseconds
 }
 
-export function logout() {
-  localStorage.removeItem("accessToken");
-  localStorage.removeItem("refreshToken");
-  window.location.href = "/login";
-}
+/* ===========================
+   ROLES
+=========================== */
 
 export function hasRole(role) {
   const user = getUser();

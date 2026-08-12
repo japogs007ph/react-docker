@@ -1,5 +1,5 @@
 import { Outlet, Link } from "react-router-dom";
-import { logout } from "../auth/Auth";
+import { logout } from "../auth/AuthService";
 
 export default function DashboardLayout() {
   return (
