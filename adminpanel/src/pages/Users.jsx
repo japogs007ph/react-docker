@@ -88,60 +88,63 @@ export default function Users() {
         </button>
       </div>
 
-      <table className="w-full border border-collapse">
-        <thead className="bg-gray-200">
-          <tr>
-            <th className="p-2 text-left font-semibold text-gray-700">Username</th>
-            <th className="p-2 text-left font-semibold text-gray-700">Role</th>
-            <th className="p-2 text-left font-semibold text-gray-700">Status</th>
-            <th className="p-2 text-left">Actions</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {users.map((u) => (
-            <tr key={u.Id} className="border-t hover:bg-gray-50">
-              <td className="p-2 align-middle">{u.UserName}</td>
-              <td className="p-2 align-middle">{u.Role}</td>
-              <td className="p-2 align-middle">
-                <span
-                  className={`px-2 py-1 rounded text-xs font-bold ${
-                    u.IsActive
-                      ? "bg-green-100 text-green-700"
-                      : "bg-red-100 text-red-600"
-                  }`}
-                >
-                  {u.IsActive ? "Active" : "Inactive"}
-                </span>
-              </td>
-              <td className="p-2 space-x-2">
-                <button
-                  onClick={() => handleEdit(u)}
-                  className="bg-blue-500 text-white px-2 py-1 rounded"
-                >
-                  Edit
-                </button>
-
-                {u.IsActive ? (
-                  <button
-                    onClick={() => handleDelete(u.Id)}
-                    className="bg-red-500 text-white px-2 py-1 rounded"
-                  >
-                    Deactivate
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => handleActivate(u.Id)}
-                    className="bg-green-600 text-white px-2 py-1 rounded"
-                  >
-                    Activate
-                  </button>
-                )}
-              </td>
+      <div className="overflow-x-auto">
+        <table className="w-full border border-collapse">
+          <thead className="bg-gray-200">
+            <tr>
+              <th className="p-2 text-left font-semibold text-gray-700">Username</th>
+              <th className="p-2 text-left font-semibold text-gray-700">Role</th>
+              <th className="p-2 text-left font-semibold text-gray-700">Status</th>
+              <th className="p-2 text-left">Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody>
+            {users.map((u) => (
+              <tr key={u.Id} className="border-t hover:bg-gray-50">
+                <td className="p-2 align-middle">{u.UserName}</td>
+                <td className="p-2 align-middle">{u.Role}</td>
+                <td className="p-2 align-middle">
+                  <span
+                    className={`px-2 py-1 rounded text-xs font-bold ${
+                      u.IsActive
+                        ? "bg-green-100 text-green-700"
+                        : "bg-red-100 text-red-600"
+                    }`}
+                  >
+                    {u.IsActive ? "Active" : "Inactive"}
+                  </span>
+                </td>
+                <td className="p-2 space-x-2">
+                  <button
+                    onClick={() => handleEdit(u)}
+                    className="bg-blue-500 text-white px-2 py-1 rounded"
+                  >
+                    Edit
+                  </button>
+
+                  {u.IsActive ? (
+                    <button
+                      onClick={() => handleDelete(u.Id)}
+                      className="bg-red-500 text-white px-2 py-1 rounded"
+                    >
+                      Deactivate
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => handleActivate(u.Id)}
+                      className="bg-green-600 text-white px-2 py-1 rounded"
+                    >
+                      Activate
+                    </button>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      
 
       {/* ✅ Modal */}
       {showModal && (

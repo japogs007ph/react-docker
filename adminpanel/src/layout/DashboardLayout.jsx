@@ -16,7 +16,7 @@ export default function DashboardLayout() {
       </aside>
 
       {/* Main */}
-      <main className="flex-1 p-8">
+      <main className="flex-1 min-w-0 p-8 bg-gray-100">
         <header className="mb-8">
           <h1 className="text-3xl font-bold">Admin Panel</h1>
 
